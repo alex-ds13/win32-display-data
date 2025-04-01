@@ -9,11 +9,14 @@ pub mod error;
 pub use device::Device;
 pub use error::Error;
 
-pub fn connected_displays_physical(
-) -> impl Iterator<Item = Result<device::PhysicalDevice, error::Error>> {
-    device::connected_displays_physical().map(|r| r.map_err(Into::into))
+pub fn connected_displays_physical() -> Vec<device::PhysicalDevice> {
+    device::connected_displays_physical()
+        .flat_map(|r| r.map_err(Into::<Error>::into))
+        .collect()
 }
 
-pub fn connected_displays_all() -> impl Iterator<Item = Result<device::Device, error::Error>> {
-    device::connected_displays_all().map(|r| r.map_err(Into::into))
+pub fn connected_displays_all() -> Vec<device::Device> {
+    device::connected_displays_all()
+        .flat_map(|r| r.map_err(Into::<Error>::into))
+        .collect()
 }
